@@ -6,10 +6,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import com.jin.composeexam.util.Constants
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
     Column(Modifier.fillMaxSize()) {
-        Text("Home Screen")
+        Text(
+            text = "${Constants.displayName} - " +
+                    "${Constants.gender} - " +
+                    "${Constants.result}"
+        )
     }
 }

@@ -41,9 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.jin.composeexam.R
-import com.jin.composeexam.showToast
-import com.jin.composeexam.ui.Screen
+import com.jin.composeexam.data.model.Screen
 import com.jin.composeexam.ui.theme.backgroundColor4
+import com.jin.composeexam.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -93,6 +93,9 @@ fun LoginScreen(navHostController: NavHostController) {
         OutlinedTextField(
             value = userName,
             onValueChange = {
+                if (it.length > USER_NAME_MAX_LENGTH) {
+                    return@OutlinedTextField
+                }
                 userName = it
             },
             modifier = Modifier.padding(16.dp),
@@ -112,6 +115,9 @@ fun LoginScreen(navHostController: NavHostController) {
             onValueChange = { it ->
                 val number = it.toIntOrNull()
                 if (number != null) {
+                    if (it.length >= PASS_WORD_MAX_LENGTH) {
+                        return@OutlinedTextField
+                    }
                     password = it
                 }
             },
@@ -152,15 +158,23 @@ fun LoginScreen(navHostController: NavHostController) {
         when (stateScreen) {
             StateScreen.Done.id,
             StateScreen.Init.id -> {
-                ElevatedButton(onClick = {
+                BaseButtonNext(onClick = {
                     if (validate(context, userName, password)) {
                         stateScreen = StateScreen.Loading.id
                     } else {
                         context.showToast("UserName or PassWord is not correct!")
                     }
-                }, colors = ButtonDefaults.buttonColors(containerColor = backgroundColor4)) {
-                    Text(text = "Login", color = Color.White, fontWeight = FontWeight.Bold)
-                }
+                }, text = "Login")
+
+//                ElevatedButton(onClick = {
+//                    if (validate(context, userName, password)) {
+//                        stateScreen = StateScreen.Loading.id
+//                    } else {
+//                        context.showToast("UserName or PassWord is not correct!")
+//                    }
+//                }, colors = ButtonDefaults.buttonColors(containerColor = backgroundColor4)) {
+//                    Text(text = "Login", color = Color.White, fontWeight = FontWeight.Bold)
+//                }
             }
 
             StateScreen.Loading.id -> {
@@ -187,4 +201,13 @@ private fun validate(context: Context, userName: String, password: String): Bool
         return false
     }
     return userName.length > "@gmail.com".length && password.length >= 4
+}
+
+@Composable
+fun BaseButtonNext(onClick: () -> Unit, text: String) {
+    ElevatedButton(onClick = {
+        onClick()
+    }, colors = ButtonDefaults.buttonColors(containerColor = backgroundColor4)) {
+        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold)
+    }
 }
