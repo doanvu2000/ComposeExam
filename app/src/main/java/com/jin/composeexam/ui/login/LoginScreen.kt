@@ -186,5 +186,5 @@ private fun validate(context: Context, userName: String, password: String): Bool
         context.showToast("UserName must is email.")
         return false
     }
-    return userName.length > 15 && password.length > 4
+    return userName.length > "@gmail.com".length && password.length >= 4
 }
