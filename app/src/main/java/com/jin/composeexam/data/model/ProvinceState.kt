@@ -5,4 +5,14 @@ sealed class ProvinceState(val id: Int) {
     object ChooseDistrict : ProvinceState(1)
     object ChooseWard : ProvinceState(2)
     object NextScreen : ProvinceState(3)
+
+    companion object {
+        fun getProvinceState(id: Int) = when (id) {
+            ChooseProvince.id -> ChooseProvince
+            ChooseDistrict.id -> ChooseDistrict
+            ChooseWard.id -> ChooseWard
+            NextScreen.id -> NextScreen
+            else -> ChooseProvince
+        }
+    }
 }

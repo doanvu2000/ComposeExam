@@ -35,12 +35,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.jin.composeexam.data.enumz.ProvinceType
+import com.jin.composeexam.data.enumz.ProvinceType.District
+import com.jin.composeexam.data.enumz.ProvinceType.Province
+import com.jin.composeexam.data.enumz.ProvinceType.Ward
 import com.jin.composeexam.data.model.ProvinceState
 import com.jin.composeexam.data.model.Screen
 import com.jin.composeexam.ui.login.BaseButtonNext
 import com.jin.composeexam.ui.theme.backgroundColor4
 import com.jin.composeexam.ui.theme.primaryColor4
 import com.jin.composeexam.util.Constants
+import com.jin.composeexam.util.getColorByCondition
 import com.jin.composeexam.util.showToast
 
 @Composable
@@ -52,30 +57,20 @@ fun ProvinceScreen(
 
     var provinceState by remember { mutableIntStateOf(ProvinceState.ChooseProvince.id) }
 
-    var provinceName by remember { mutableStateOf("Province") }
-    var districtName by remember { mutableStateOf("District") }
-    var wardName by remember { mutableStateOf("Ward") }
+    var provinceName by remember { mutableStateOf(Province.type) }
+    var districtName by remember { mutableStateOf(District.type) }
+    var wardName by remember { mutableStateOf(Ward.type) }
 
     LaunchedEffect(Unit) {
         viewModel.getProvinces()
     }
 
     LaunchedEffect(provinceState) {
-        when (provinceState) {
-            ProvinceState.ChooseProvince.id -> {
-                //load data province
-//                viewModel.reUpdateProvinces()
+        when (ProvinceState.getProvinceState(provinceState)) {
+            ProvinceState.ChooseDistrict, ProvinceState.ChooseProvince, ProvinceState.ChooseWard -> {
             }
 
-            ProvinceState.ChooseDistrict.id -> {
-                //load data district
-            }
-
-            ProvinceState.ChooseWard.id -> {
-                //load data ward
-            }
-
-            ProvinceState.NextScreen.id -> {
+            ProvinceState.NextScreen -> {
                 //navigate to home
                 Constants.province = provinceName
                 Constants.district = districtName
@@ -84,7 +79,9 @@ fun ProvinceScreen(
             }
         }
     }
+
     BackHandler(enabled = false) { }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -101,11 +98,9 @@ fun ProvinceScreen(
 
         Row(Modifier.horizontalScroll(rememberScrollState())) {
             Text(
-                text = provinceName, color = if (provinceName == "Province") {
-                    Color.Black
-                } else {
-                    Color.Blue
-                }, modifier = Modifier.clickable(onClick = {
+                text = provinceName, color = getColorByCondition(
+                    ProvinceType.getProvinceType(provinceName) == Province, Color.Black, Color.Blue
+                ), modifier = Modifier.clickable(onClick = {
                     //todo: choose province
                     if (provinceState == ProvinceState.ChooseProvince.id) {
                         return@clickable
@@ -119,11 +114,13 @@ fun ProvinceScreen(
             Icon(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
 
             Text(
-                text = districtName, color = if (districtName == "District") {
+                text = districtName,
+                color = if (ProvinceType.getProvinceType(districtName) == District) {
                     Color.Black
                 } else {
                     Color.Blue
-                }, modifier = Modifier.clickable(onClick = {
+                },
+                modifier = Modifier.clickable(onClick = {
                     //todo: choose district
                     if (provinceState == ProvinceState.ChooseDistrict.id) {
                         return@clickable
@@ -140,7 +137,7 @@ fun ProvinceScreen(
             Icon(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight, null)
 
             Text(
-                text = wardName, color = if (wardName == "Ward") {
+                text = wardName, color = if (ProvinceType.getProvinceType(wardName) == Ward) {
                     Color.Black
                 } else {
                     Color.Blue
@@ -162,10 +159,9 @@ fun ProvinceScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f)
-                .padding(16.dp)
         ) {
-            when (provinceState) {
-                ProvinceState.ChooseProvince.id -> {
+            when (ProvinceState.getProvinceState(provinceState)) {
+                ProvinceState.ChooseProvince -> {
                     items(uiState.provinces.size) { index ->
                         val item = uiState.provinces[index]
                         ItemProvince(onClick = {
@@ -179,7 +175,7 @@ fun ProvinceScreen(
                     }
                 }
 
-                ProvinceState.ChooseDistrict.id -> {
+                ProvinceState.ChooseDistrict -> {
                     items(uiState.districts.size) { index ->
                         val item = uiState.districts[index]
                         ItemProvince(onClick = {
@@ -192,7 +188,7 @@ fun ProvinceScreen(
                     }
                 }
 
-                ProvinceState.ChooseWard.id -> {
+                ProvinceState.ChooseWard -> {
                     items(uiState.wards.size) { index ->
                         val item = uiState.wards[index]
                         ItemProvince(onClick = {
@@ -202,13 +198,13 @@ fun ProvinceScreen(
                         }, item.nameWithType)
                     }
                 }
-            }
 
+                ProvinceState.NextScreen -> {}
+            }
         }
 
         Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
         ) {
             BaseButtonNext(
                 onClick = {
@@ -237,8 +233,7 @@ fun ItemProvince(onClick: () -> Unit, text: String) {
         shape = CardDefaults.elevatedShape
     ) {
         Text(
-            text = text, color = primaryColor4,
-            modifier = Modifier
+            text = text, color = primaryColor4, modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         )

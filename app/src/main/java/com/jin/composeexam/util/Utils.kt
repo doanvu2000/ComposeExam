@@ -2,6 +2,7 @@ package com.jin.composeexam.util
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import java.io.IOException
 import java.io.InputStream
 
@@ -24,3 +25,6 @@ fun Context.loadJsonFromAsset(path: String): String? {
     }
     return json
 }
+
+fun getColorByCondition(condition: Boolean, trueColor: Color, falseColor: Color) =
+    if (condition) trueColor else falseColor
