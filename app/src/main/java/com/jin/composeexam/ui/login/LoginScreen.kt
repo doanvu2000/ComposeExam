@@ -43,6 +43,7 @@ import androidx.navigation.NavHostController
 import com.jin.composeexam.R
 import com.jin.composeexam.data.model.Screen
 import com.jin.composeexam.ui.theme.backgroundColor4
+import com.jin.composeexam.util.clickOutsideListener
 import com.jin.composeexam.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -60,7 +61,9 @@ sealed class StateScreen(val id: Int) {
 @Composable
 fun LoginScreen(navHostController: NavHostController) {
     val context = LocalContext.current
+
     val keyboardController = LocalSoftwareKeyboardController.current
+    fun hideKeyboard() = keyboardController?.hide()
 
     var userName by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -85,7 +88,10 @@ fun LoginScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .clickOutsideListener {
+                hideKeyboard()
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -151,15 +157,21 @@ fun LoginScreen(navHostController: NavHostController) {
                 )
             },
             keyboardActions = KeyboardActions(onDone = {
-                keyboardController?.hide()
+                if (validate(context, userName, password)) {
+                    hideKeyboard()
+                    stateScreen = StateScreen.Loading.id
+                } else {
+                    context.showToast("UserName or PassWord is not correct!")
+                }
+                hideKeyboard()
             })
         )
 
         when (stateScreen) {
-            StateScreen.Done.id,
-            StateScreen.Init.id -> {
+            StateScreen.Done.id, StateScreen.Init.id -> {
                 BaseButtonNext(onClick = {
                     if (validate(context, userName, password)) {
+                        hideKeyboard()
                         stateScreen = StateScreen.Loading.id
                     } else {
                         context.showToast("UserName or PassWord is not correct!")
