@@ -3,16 +3,12 @@ package com.jin.composeexam.ui.login
 import android.content.Context
 import android.util.Patterns
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -26,13 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -42,7 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.jin.composeexam.R
 import com.jin.composeexam.data.model.Screen
-import com.jin.composeexam.ui.theme.backgroundColor4
+import com.jin.composeexam.ui.BaseButtonNext
+import com.jin.composeexam.ui.ColumnCenterItem
 import com.jin.composeexam.util.clickOutsideListener
 import com.jin.composeexam.util.showToast
 import kotlinx.coroutines.Dispatchers
@@ -85,15 +80,13 @@ fun LoginScreen(navHostController: NavHostController) {
         }
     }
 
-    Column(
+    ColumnCenterItem(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .clickOutsideListener {
                 hideKeyboard()
-            },
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            }
     ) {
 
         OutlinedTextField(
@@ -177,16 +170,6 @@ fun LoginScreen(navHostController: NavHostController) {
                         context.showToast("UserName or PassWord is not correct!")
                     }
                 }, text = "Login")
-
-//                ElevatedButton(onClick = {
-//                    if (validate(context, userName, password)) {
-//                        stateScreen = StateScreen.Loading.id
-//                    } else {
-//                        context.showToast("UserName or PassWord is not correct!")
-//                    }
-//                }, colors = ButtonDefaults.buttonColors(containerColor = backgroundColor4)) {
-//                    Text(text = "Login", color = Color.White, fontWeight = FontWeight.Bold)
-//                }
             }
 
             StateScreen.Loading.id -> {
@@ -213,13 +196,4 @@ private fun validate(context: Context, userName: String, password: String): Bool
         return false
     }
     return userName.length > "@gmail.com".length && password.length >= 4
-}
-
-@Composable
-fun BaseButtonNext(onClick: () -> Unit, text: String) {
-    ElevatedButton(onClick = {
-        onClick()
-    }, colors = ButtonDefaults.buttonColors(containerColor = backgroundColor4)) {
-        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold)
-    }
 }

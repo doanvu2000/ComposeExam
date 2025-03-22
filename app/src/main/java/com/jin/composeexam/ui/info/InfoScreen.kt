@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.jin.composeexam.data.model.Screen
-import com.jin.composeexam.ui.login.BaseButtonNext
+import com.jin.composeexam.ui.BaseButtonNext
 import com.jin.composeexam.util.Constants
 import com.jin.composeexam.util.showToast
 

@@ -41,7 +41,7 @@ import com.jin.composeexam.data.enumz.ProvinceType.Province
 import com.jin.composeexam.data.enumz.ProvinceType.Ward
 import com.jin.composeexam.data.model.ProvinceState
 import com.jin.composeexam.data.model.Screen
-import com.jin.composeexam.ui.login.BaseButtonNext
+import com.jin.composeexam.ui.BaseButtonNext
 import com.jin.composeexam.ui.theme.backgroundColor4
 import com.jin.composeexam.ui.theme.primaryColor4
 import com.jin.composeexam.util.Constants
@@ -105,8 +105,8 @@ fun ProvinceScreen(
                     if (provinceState == ProvinceState.ChooseProvince.id) {
                         return@clickable
                     }
-                    districtName = "District"
-                    wardName = "Ward"
+                    districtName = District.type
+                    wardName = Ward.type
                     provinceState = ProvinceState.ChooseProvince.id
                 })
             )
@@ -125,11 +125,11 @@ fun ProvinceScreen(
                     if (provinceState == ProvinceState.ChooseDistrict.id) {
                         return@clickable
                     }
-                    if (provinceName == "Province") {//not select province
+                    if (provinceName == Province.type) {//not select province
                         return@clickable
                     }
-                    districtName = "District"
-                    wardName = "Ward"
+                    districtName = District.type
+                    wardName = Ward.type
                     provinceState = ProvinceState.ChooseDistrict.id
                 })
             )
@@ -146,10 +146,10 @@ fun ProvinceScreen(
                     if (provinceState == ProvinceState.ChooseWard.id) {
                         return@clickable
                     }
-                    if (districtName == "District") {//not select district
+                    if (districtName == District.type) {//not select district
                         return@clickable
                     }
-                    wardName = "Ward"
+                    wardName = Ward.type
                     provinceState = ProvinceState.ChooseWard.id
                 })
             )
@@ -167,8 +167,8 @@ fun ProvinceScreen(
                         ItemProvince(onClick = {
                             //update ui, next to choose district
                             provinceName = item.nameWithType
-                            districtName = "District"
-                            wardName = "Ward"
+                            districtName = District.type
+                            wardName = Ward.type
                             viewModel.getDistrictsByProvinceId(item.code)
                             provinceState = ProvinceState.ChooseDistrict.id
                         }, item.nameWithType)
@@ -181,7 +181,7 @@ fun ProvinceScreen(
                         ItemProvince(onClick = {
                             //update ui, next to choose district
                             districtName = item.nameWithType
-                            wardName = "Ward"
+                            wardName = Ward.type
                             viewModel.getWardsByDistrictId(item.code)
                             provinceState = ProvinceState.ChooseWard.id
                         }, item.nameWithType)
@@ -208,7 +208,7 @@ fun ProvinceScreen(
         ) {
             BaseButtonNext(
                 onClick = {
-                    if (provinceName != "Province" && districtName != "District" && wardName != "Ward") {
+                    if (provinceName != Province.type && districtName != District.type && wardName != Ward.type) {
                         provinceState = ProvinceState.NextScreen.id
                     } else {
                         context.showToast("Please choose province, district and ward.")
