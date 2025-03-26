@@ -39,12 +39,6 @@ class ProvinceViewModel @Inject constructor(
         }
     }
 
-    fun reUpdateProvinces() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(provinces = _uiState.value.provinces)
-        }
-    }
-
     fun getDistrictsByProvinceId(provinceId: Int) {
         viewModelScope.launch {
             Log.d(TAG, "get districts: start")
