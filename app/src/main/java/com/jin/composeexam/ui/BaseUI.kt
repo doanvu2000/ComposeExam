@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import com.jin.composeexam.ui.theme.backgroundColor4
+import com.jin.composeexam.ui.theme.primaryColor4
 
 @Composable
 fun ColumnCenterItem(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
@@ -37,10 +38,14 @@ fun RowCenterItem(modifier: Modifier = Modifier, content: @Composable RowScope.(
 }
 
 @Composable
-fun BaseButtonNext(onClick: () -> Unit, text: String) {
+fun BaseButtonNext(
+    onClick: () -> Unit, text: String,
+    backgroundColor: Color = backgroundColor4,
+    textColor: Color = primaryColor4
+) {
     ElevatedButton(onClick = {
         onClick()
-    }, colors = ButtonDefaults.buttonColors(containerColor = backgroundColor4)) {
-        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold)
+    }, colors = ButtonDefaults.buttonColors(containerColor = backgroundColor)) {
+        Text(text = text, color = textColor, fontWeight = FontWeight.Bold)
     }
 }
