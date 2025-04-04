@@ -1,6 +1,8 @@
 package com.jin.composeexam.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -33,6 +35,13 @@ fun RowCenterItem(modifier: Modifier = Modifier, content: @Composable RowScope.(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        content()
+    }
+}
+
+@Composable
+fun BoxCenterItem(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
+    Box(modifier, contentAlignment = Alignment.Center) {
         content()
     }
 }
