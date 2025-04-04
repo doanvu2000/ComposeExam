@@ -20,6 +20,14 @@ import monthLabels_Long
 
 @Composable
 fun StartScreen(navController: NavController) {
+//    Surface(
+//        modifier = Modifier.fillMaxSize(),
+//        color = MaterialTheme.colorScheme.background
+//    ) {
+//        Column(modifier = Modifier.padding(16.dp)) {
+//            CategoryChartView(dataList = categoryDataList)
+//        }
+//    }
     ColumnCenterItem(Modifier.fillMaxSize()) {
         MonthlyGraphView(
             data = graphDataPoints_Long,
